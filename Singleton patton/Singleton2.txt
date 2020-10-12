@@ -1,0 +1,69 @@
+#include <iostream>
+using namespace std;
+
+class Singleton {
+private:
+	Singleton() :total(0) { cout << "private 생성자, Instance Falg:" << instanceFlag << endl; };	// 생성자가 private member 함수
+
+	static bool instanceFlag;   	 // Singleton 객체가 생성되면 true, 삭제되면 false
+	static Singleton* instance;	 // 생성된 객체의 주소 값을 저장 
+	int total;                 	 // 객체가 생성될 때 값은 0으로 초기화 
+public:
+	// Singleton 객체를 반환하는 함수 (한번 생성하고 공유할 수 있도록 함)
+	static Singleton* getInstance()
+	{
+		if(!instance) //다른 인스턴스 생성을 방지하는 역할
+		{
+		cout << "생성자 실행 및 인스턴스 할당" << endl;
+		instanceFlag = true;                   //객체가 생성되면 true;
+		instance = new Singleton();         //동적 할당을 통해 객체를 만듭니다!
+		}
+		return instance;		       //중복되는 객체 생성을 방지하면 인스턴트로 리턴
+	}
+	~Singleton()			       //소멸자
+	{
+		cout << "public 소멸자" << endl;
+	}
+
+	void cummulate(int value) 		  // 입력 파러미터 value를 total에 더하기 
+	{
+		total += value;		  // 변수를 통해 입력받은 값을 더합니다.!
+	}
+	int getTotal()
+	{
+		return total;		  // total값을 리턴합니다.
+	}
+
+	void deallocate();
+
+};
+bool Singleton::instanceFlag = false;
+Singleton* Singleton::instance = NULL;
+
+void Singleton::deallocate()			//delete를 통한 동적할당 해지
+{
+	if (!instanceFlag) { return; }		//0일시 return 실행 1일시 delete로 넘어갑니다!
+	delete instance;
+	instanceFlag = false;		//동적 할당 해지이후 소멸자가 실행 됩니다.
+	cout << "delete instnace, instance flag: "<< instanceFlag << endl;
+}
+
+int main(void)
+{
+	Singleton* ptr1, * ptr2, * ptr3;	// 포인터 변수 형태의 선언
+	ptr1 = Singleton::getInstance();	// 각각의 변수에 인스턴스를 저장
+	ptr2 = Singleton::getInstance();
+	ptr3 = Singleton::getInstance();
+
+	ptr1->cummulate(10);
+	cout << "total: " << ptr1->getTotal() << endl;
+	ptr2->cummulate(30);
+	cout << "total: " << ptr2->getTotal() << endl;
+	ptr3->cummulate(10);
+	cout << "total: " << ptr3->getTotal() << endl;
+
+	ptr1->Singleton::deallocate();
+	ptr2->Singleton::deallocate();
+	ptr3->Singleton::deallocate();
+	return 0;
+}
