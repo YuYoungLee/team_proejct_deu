@@ -1,15 +1,18 @@
-teamproject
+teamproject 디자인 패턴 분석
 
-참조 STL 라이브러리 분석 https://github.com/SilverMaple/STLSourceCodeNote
+1단계. 시도할수 있는 디자인 패턴들을 분석
+2단계. 기초부터 분석한 디자인 패턴들을 단계별로 정리 - 중간고사 까지 시도
+3단계. 디자인 패턴 응용을 시도 - 가지고 있는 패턴들을 가지고 다시 프로그래밍
+4단계. 미정
 
-Wiki STL https://ko.wikipedia.org/wiki/%ED%91%9C%EC%A4%80_%ED%85%9C%ED%94%8C%EB%A6%BF_%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC
 
-마이크로 소프트 오픈소스 STL https://devblogs.microsoft.com/cppblog/open-sourcing-msvcs-stl/ https://github.com/microsoft/STL
+디자인-
+싱글톤 패턴
+특정 클래스의 인스턴스를 1개만 생성되도록 제한하고 이를 공유하는 방법
+1. new키워드로 클래스의 인스턴스를 직접 생성할 수 없도록 한다.
+2. static 함수를 통해 인스턴트를 받는다.
+3. if(!instance) - 인스턴트가 존재하면 return instance; 를 통해 반환
 
-마이크로 소프트 docs https://docs.microsoft.com/en-us/
-
-과정
-1.헤더파일 분석
-2.헤더파일 분석을 통한 코딩
-3.위 주소를 통한 코드 분석
-4.분석한 코드를 사용하여 다시 코딩
+명령 커맨드 패턴
+요청 자체를 캡슐화, 서로  다른사용자 client를 매개변수로 만들고
+요청을 대기 시키거나 로깅, 되돌릴 수 있는 연산을 지원.
