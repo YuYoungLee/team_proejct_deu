@@ -1,5 +1,5 @@
 //빌더 패턴. 여러 복잡한 요소들의 조합이 필요한 객체를 생성해야 하거나
-//여러개의 다양한 객체 집합을 새애성해야 할 때 개개체 생성만을 전담하는 컴포넌트를 정의
+//여러개의 다양한 객체 집합을 생성해야 할 때 개개체 생성만을 전담하는 컴포넌트를 정의
 //객체 생성을 간편하게 하는 것
 
 #include <iostream>
@@ -17,6 +17,8 @@ struct Armor
 {
 	int mDefence;
 };
+//케릭터 클래스 포함요소
+//struct 아머, 웨폰의 주소
 
 class Character
 {
@@ -31,7 +33,7 @@ public:
 		cout << "Armor defence" << mWeapon->mPower << endl;
 	}
 };
-
+//무기와 아머의 정보를 주소를 통해 참조
 class CharacterBuilder
 {
 public:
@@ -42,8 +44,8 @@ public:
 
 class CharacterDirector
 {
-	//has - a관계 CharacterDirector
-	//mBuilder는 케릭터의 요소인 아머, 무기의 정보가 담긴다.
+	//Character has - a관계 CharacterDirector
+	//character 객체는 주소를 통해 케릭터의 요소인 아머, 무기의 정보가 담긴다.
 	CharacterBuilder* mBuilder;
 public:
 
@@ -68,6 +70,7 @@ public:
 
 //상속 is - a관계, 아쳐 워리어 클래스
 //아처는 케릭터다.
+//케릭터를 만드는 빌더를 참조하여 케릭터의 요소 무기, 아머의 값들을 설정
 class ArcherBuilder : public CharacterBuilder
 {
 public:
