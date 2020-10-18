@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+
+class LocalStaticSingleton
+{
+private:
+	LocalStaticSingleton() { cout << "생성!" << endl; }
+	LocalStaticSingleton(const LocalStaticSingleton& copy) { cout << "const 생성" << endl; }
+	~LocalStaticSingleton() { cout << "소멸!" << endl; }
+public:
+	static LocalStaticSingleton* Getinstance()
+	{
+		//static LocalStaticSingleton* ins;		//포인터 형태
+		static LocalStaticSingleton ins2;		//일반 선언형태
+		return &ins2;						//주소를 통한 반환
+	}
+};
+
+int main(void)
+{
+	LocalStaticSingleton::Getinstance();
+	return 0;
+}
+
+결과 
+static LocalStaticSingleton ins2; 통해 객체 생성 및 소멸자 확인
+static LocalStaticSingleton* ins; 통해서는 생성자 실행 불가.
+
+일반 선형형태로 선언 이후 &를 사용하여 주소로 변환하여 반환해야 한다.
