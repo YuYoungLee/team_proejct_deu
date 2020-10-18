@@ -1,0 +1,79 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+
+class Computer
+{
+private:
+	char owner[50];
+public:
+	Computer(const char* name)
+	{
+		strcpy(owner, name);
+	}
+
+	void Calculate()
+	{
+		cout << "요청 내용을 계산합니다." << endl;
+	}
+};
+
+class NotebookComp : public Computer
+{
+private:
+	int Battery;
+public:
+	NotebookComp(const char* name, int initChang)
+		:Computer(name), Battery(initChang)
+	{}
+	void Charging() {Battery += 5;}
+	void UseBattery() { Battery -= 1; }
+	void MovingCal()
+	{
+		if (GetBatteryInfo() < 1)
+		{
+			cout << "충전이 필요합니다." << endl;
+			return;
+		}
+		cout << "이동하면서" << endl;
+		Calculate();
+		UseBattery();
+	}
+	int GetBatteryInfo() { return Battery; }//if문을 통해서 베터리의 값을 비교
+};
+
+class TabletNotebook : public NotebookComp
+{
+private:
+	char regstPenModel[50];
+public:
+	TabletNotebook(const char* name, int initChang, const char *pen):
+		NotebookComp(name, initChang)
+	{
+		strcpy(regstPenModel, name);
+	}
+	void Write(const char* penInfo)
+	{
+		if (GetBatteryInfo() < 1)
+		{
+			cout << "충전이 필요합니다." << endl;
+		}
+
+		if (strcmp(regstPenModel, penInfo) != 0) //펜 모델의 정보를 비교
+		{
+			cout << " 필기 내용을 처리합니다." << endl;
+			UseBattery();
+		}
+	}
+};
+
+int main()
+{
+	NotebookComp myname("둘리", 5);
+	TabletNotebook yourname("홍길동", 15, "Ipen-23");
+	myname.MovingCal();
+	yourname.Write("Ipen-23");
+
+	return 0;
+}
+
