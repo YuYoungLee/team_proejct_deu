@@ -1,0 +1,60 @@
+#include <iostream>
+using namespace std;
+
+class Gun	//has - a관계
+{
+private:
+	int bullet;
+public:
+	Gun(int bnum) : bullet(bnum)	
+	{ }
+	void Shot()				//총알의 인자가 전달됬을때 사용되는 함수
+	{
+		cout << "BBANG!" << endl;
+		bullet--;
+	}
+};
+
+class Police		//has -a 관계 : 경찰은 총을 소유하고 있다.
+{
+private:
+	int handcuffs;
+	Gun* pistol;	//클래스 포인터 변수를 통해 접근
+public:
+	Police(int bnum, int bcuff) :handcuffs(bcuff)
+	{
+		if (bnum > 0)	//총알의 인자를 전달
+			pistol = new Gun(bnum);//동적 할당을 통해 Gun의 객체를 생성
+		else
+			pistol = NULL;		   //인자로 0보다 작은 총알 전달시 GUN 클래스 사용 불가
+	}
+	void PutHandcuff()
+	{
+		cout << "SNAP!" << endl;
+		handcuffs--;
+	}
+	void Shot()
+	{
+		if (pistol == NULL)			//총알의 인자가 0일시 진행되는 함수
+			cout << "Hut BBANG!" << endl;
+		else
+			pistol->Shot();		//클래스 포인터를 통해 멤버함수에 접근
+	}
+	~Police()
+	{
+		if (pistol != NULL)
+			delete pistol;
+	}
+};
+
+int main(void)
+{
+	Police pman1(5, 3);
+	pman1.Shot();
+	pman1.PutHandcuff();
+
+	Police pman2(0, 3);
+	pman2.Shot();
+	pman2.PutHandcuff();
+	return 0;
+}
