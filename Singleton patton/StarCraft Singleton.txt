@@ -1,0 +1,81 @@
+#include <iostream>
+using namespace std;
+
+class StarCraft 
+{
+private:
+	StarCraft():totaldamage(0),totalhealth(0) { cout << "생성" << endl; }
+	StarCraft(const StarCraft& copy) { cout << "const" << endl; }
+
+	static StarCraft* instance;
+	int totaldamage;
+	int totalhealth;
+public:
+	static StarCraft* Getinstance()
+	{
+		if (!instance)
+		{
+			instance = new StarCraft();
+		}
+		return instance;
+	}
+	void setting(int n1, int n2)
+	{
+		totaldamage += n1;
+		totalhealth += n2;
+	}
+
+	void showall()
+	{
+		cout << "공격력: " << totaldamage << endl;
+		cout << "체력: " << totalhealth << endl;
+	}
+};
+StarCraft* StarCraft::instance = NULL;
+
+int main(void)
+{
+	StarCraft* marine[10];						//객체 포인터 베열
+	StarCraft* scv1,* scv2,* scv3;				//객체 포인터
+	scv1 = StarCraft::Getinstance();			//스테틱 인스턴트 동적할당
+	scv2 = StarCraft::Getinstance();			//스테틱 인스턴트 리턴
+	scv3 = StarCraft::Getinstance();
+
+	for (int i = 0; i < 10; i++)				//스테틱 인스턴트 리턴
+	{
+		marine[i] = StarCraft::Getinstance();
+		marine[i]->setting(2, 50);
+		marine[i]->showall();
+	}
+
+	scv1->setting(1, 45);
+	scv2->setting(1, 45);
+	scv3->setting(1, 45);
+
+	scv1->showall();
+	scv2->showall();
+	scv3->showall();
+
+	return 0;
+}
+
+객체 포인터를 통해 접근하여 조금더 효율적으로 설계하는 방식으로 접근
+비교를 위해 일반적인 객체 포인터 방식으로도 선언
+static접근은 클래스 접근 방식으로 선언하며 이를 각 객체에 저장하여 중복되는 생성자를 막는 형태
+여러 객체들을 하나의 생성자를 통해 묶는 방식, 여러 정보들을 하나로 묶을때 효율적이다.
+
+
+인스턴트 할당
+marine[i] = StarCraft::Getinstance();	//객체 포인터 배열
+scv1 = StarCraft::Getinstance();	//포인터 객체
+
+함수의 접근
+marine[i]->setting(2, 50);
+scv1->setting(1, 45);
+
+결과의 출력
+marine[i]->showall();
+scv1->setting(1, 45);
+
+모든 객체들을 static을 통해 생성한 생성자를 지칭
+생성한 객체들의 모든 공격력과 체력들이 저장되고 출력되는지를 확인합니다.
