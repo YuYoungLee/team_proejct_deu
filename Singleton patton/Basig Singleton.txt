@@ -1,0 +1,35 @@
+//싱글톤 이해를 위해 test한 코딩
+
+class Singleton 				//싱글톤 클래스
+{
+private:
+	Singleton() {}; 			//프라이빗 생성자
+	Singleton(const Singleton& create) {}; 	//프라이빗 생성자
+	static Singleton* instance;		//스테틱 클래스 포인터 인스턴스
+
+	
+public:
+	static Singleton* GetInstance()	//스테틱 클래스 포인터 함수 인스턴스 호출시 리턴한다!
+	{
+		cout << num;
+		instance = new Singleton();	//동적 할당을 통해 객체 생성
+		return instance;		//인스턴트 리턴
+	}
+};
+
+Singleton* Singleton::instance = nullptr; 	//static 클래스포인터, NULL로 초기화
+
+int main(void)
+{
+	Singleton::GetInstance();		//클래스를 통한 접근
+	return 0;
+}
+
+싱글톤 패턴. 하나의 프로그램 내에서 공통적으로 쓰이는 자원들을 관리, 저장하는 역할
+
+자기사진을 받는 함수가 필요하며 - static Singleton* GetInstance()
+자신 객체를 반환하는 static 클래스 포인터가 필요하다. - static Singleton* instance;
+단점1. static 클래스 맴버 변수는 main 호출이전 초기화
+단점2. 다른 전역 객체의 생성자에서 참조 하고 싶은 경우 문제가 발생
+
+주의. static의 함수접근은 클래스를 통해 접근
