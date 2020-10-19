@@ -1,0 +1,109 @@
+#include <iostream>
+using namespace std;
+
+struct Weapon
+{
+	int mPower;
+};
+
+struct Armor
+{
+	int mArmor;
+};
+//케릭터는 struct들의 요소를 가짐
+class Character
+{
+public:
+	Weapon* sPower;
+	Armor* sArmor;
+
+	void showstat()
+	{
+		cout << "공격력: " << sPower->mPower << endl;
+		cout << "방어력: " << sArmor->mArmor << endl;
+	}
+};
+//케릭터 빌더는 케릭터 클래스의 요소를 가짐
+class CharacterBuilder
+{
+public:
+	virtual Weapon* CreateWeapon() = 0;
+	virtual Armor* CreateArmor() = 0;
+};
+//케릭터 감독자는 케릭터 클래스의 요소들을 가지며 객체를 생성
+//has -a
+class CharacterDirector
+{
+	CharacterBuilder* cBuilder;
+public:
+	void SetBuilder(CharacterBuilder* mBuilder)
+	{
+		cBuilder = mBuilder;
+	}
+
+	Character* CreateCharacter()
+	{
+		Character* character = new Character();
+
+		character->sPower = cBuilder->CreateWeapon();
+		character->sArmor = cBuilder->CreateArmor();
+
+		return character;
+	}
+};
+
+//마린은 케릭터 빌더를 상속받는다.
+//is -a
+class Marine : public CharacterBuilder
+{
+public:
+	Weapon* CreateWeapon()
+	{
+		Weapon* weapon = new Weapon();
+		weapon->mPower = 3;
+		return weapon;
+	}
+	Armor* CreateArmor()
+	{
+		Armor* armor = new Armor();
+		armor->mArmor = 1;
+		return armor;
+	}
+};
+
+class Tank : public CharacterBuilder
+{
+public:
+	Weapon* CreateWeapon()
+	{
+		Weapon* weapon = new Weapon();
+		weapon->mPower = 10;
+		return weapon;
+	}
+	Armor* CreateArmor()
+	{
+		Armor* armor = new Armor();
+		armor->mArmor = 3;
+		return armor;
+	}
+};
+
+int main(void)
+{
+	//케릭터 클래스 포인터
+	Character* character;
+	//감독자 객체
+	CharacterDirector director;
+
+	Marine m1;
+	director.SetBuilder(&m1);
+	character = director.CreateCharacter();
+	character->showstat();
+
+	Tank t1;
+	director.SetBuilder(&t1);
+	character = director.CreateCharacter();
+	character->showstat();
+
+	return 0;
+}
