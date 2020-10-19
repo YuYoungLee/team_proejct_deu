@@ -28,38 +28,40 @@ public:
 	void DisplayParts()
 	{
 		cout << "Weapon power" << mWeapon->mPower << endl;
-		cout << "Armor defence" << mWeapon->mPower << endl;
+		cout << "Armor defence" << mWeapon->mDefence << endl;
 	}
 };
 //케릭터 빌더
-
+//Struct의 주소를 통해 힘과 방어력 정보를 출력
 class CharacterBuilder
 {
 public:
 //virtual 순수 가상함수, 자식 클래스에서 재정의 가능형태
+//virtual 을 사용하는 이유 - 자식 클래스를 통해 재 정의 가 필요하기 때문
+//만약 오버라이딩 까지 사용할 경우 마지막으로 오버라이딩된 함수 출력도 가능하다.
 	virtual Weapon* CreateWeapon() = 0;
 	virtual Armor * CreateArmor() = 0;
 };
-
+//케릭터 감독자 has-a(소유의)관계
+//케릭터클래스 포인터를 사용
+//캐릭터 감독자는 캐릭터 빌더의 정보를 가진다. 
+//케릭터 빌더의 객체를 이곳에서 만들며 저장
+//has-a 관계
+//상속하는 것이아닌 객체를 멤버 함수에서 생성하여 이를 참조하는 방식
 class CharacterDirector
 {
-	//Character has - a관계 CharacterDirector
-	//character 객체는 주소를 통해 케릭터의 요소인 아머, 무기의 정보가 담긴다.
 	CharacterBuilder* mBuilder;
 public:
-
-	//클래스의 주소를 받아 부모의 객체를 생성
+//케릭터
 	void SetBuilder(CharacterBuilder* newBuilder)
 	{
 		mBuilder = newBuilder;
 	}
 
-	
+//반환형이 클래스
 	Character* CreateCharacter()
 	{
-		//케릭터 클래스를 통해 객체를 생성 
 		Character* character = new Character();
-
 		character->mWeapon = mBuilder->CreateWeapon();
 		character->mArmor = mBuilder->CreateArmor();
 
@@ -67,16 +69,16 @@ public:
 	}
 };
 
-//상속 is - a관계, 아쳐 워리어 클래스
-//아처는 케릭터다.
-//케릭터를 만드는 빌더를 참조하여 케릭터의 요소 무기, 아머의 값들을 설정
+//아쳐 워리어 클래스 is - a관계
+//struct포인터 함수
+//struct의 객체를 만들어 정보들을 저장 해당객체를 반환
 class ArcherBuilder : public CharacterBuilder
 {
 public:
 	Weapon* CreateWeapon()
 	{
-		Weapon* weapon = new Weapon();	//아처 객체안의 무기의 객체
-		weapon->mPower = 200;			//무기의 정보
+		Weapon* weapon = new Weapon();
+		weapon->mPower = 200;		
 		return weapon;
 	}
 
@@ -117,6 +119,7 @@ int main()
 	//아처, 워리어 객체 - > 무기의 정보들을 가르킴 struct
 	//감독자의 객체 -> 캐릭터 객체를 만들며 struct의 정보들을 가져옴
 
+
 	ArcherBuilder archer;
 	director.SetBuilder(&archer);
 	character = director.CreateCharacter();
@@ -130,6 +133,14 @@ int main()
 	return 0;
 }
 
-감독자와 캐릭터 객체에 어떤 정보들을 저장할 것인지 or 가르킬 것인지 정리
-감독자 - 요소들을 모음
-캐릭터 - 
+
+struct를 이용하여 공격력, 방어력 정보를 담을 수있으며
+클래스 케릭터를 통해 sturct 객체의 정보를 출력이 가능하다.
+
+클래스 빌더 
+를 통해 공격력과 방어력을 순수 가상함수 형태로 선언, 
+자식클래스에서 재정의 하게 만들고 있다.
+
+클래스 케릭터 감독자
+has-a 관계로 기초 클래스(클래스 빌더)가 지니고 있는 모든것을 소유.
+순수 가상함수 구조체 포인터를 
