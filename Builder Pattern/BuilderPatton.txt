@@ -7,7 +7,6 @@ using namespace std;
 
 
 //struct를 사용 public 형태
-//관계 해석중
 struct Weapon
 {
 	int mPower;
@@ -17,9 +16,8 @@ struct Armor
 {
 	int mDefence;
 };
-//케릭터 클래스 포함요소
-//struct 아머, 웨폰의 주소
 
+//케릭터 클래스를 통해 정보를 출력
 class Character
 {
 public:
@@ -33,11 +31,12 @@ public:
 		cout << "Armor defence" << mWeapon->mPower << endl;
 	}
 };
-//무기와 아머의 정보를 주소를 통해 참조
+//케릭터 빌더
+
 class CharacterBuilder
 {
 public:
-	//virtual 을 사용, 공부중
+//virtual 순수 가상함수, 자식 클래스에서 재정의 가능형태
 	virtual Weapon* CreateWeapon() = 0;
 	virtual Armor * CreateArmor() = 0;
 };
@@ -49,13 +48,13 @@ class CharacterDirector
 	CharacterBuilder* mBuilder;
 public:
 
-	//아쳐, 워리어 클래스의 주소를 받아 객체 생성
+	//클래스의 주소를 받아 부모의 객체를 생성
 	void SetBuilder(CharacterBuilder* newBuilder)
 	{
 		mBuilder = newBuilder;
 	}
 
-	//캐릭터 클래스를 상속하는 모든 클래스는 캐릭터 클래스만을 바라보게 됨
+	
 	Character* CreateCharacter()
 	{
 		//케릭터 클래스를 통해 객체를 생성 
@@ -109,11 +108,14 @@ public:
 
 int main()
 {
-	Character* character; //클래스 포인터를 통해 객체(케릭터)의 주소참조
+	Character* character; 		//클래스 포인터를 통해 객체(케릭터)의 주소참조
 
 	CharacterDirector director;	//감독자의 객체
 	//클래스 케릭터의 객체를 만들기
 	//케릭터의 객체의 주소를 가지고, 아처, 워리어의 정보, 방어력 공격력의 정보를 가진다.
+	//아쳐, 워리어 객체(자식 is-a) > 감독자의 객체(부모 is-a)
+	//아처, 워리어 객체 - > 무기의 정보들을 가르킴 struct
+	//감독자의 객체 -> 캐릭터 객체를 만들며 struct의 정보들을 가져옴
 
 	ArcherBuilder archer;
 	director.SetBuilder(&archer);
@@ -127,3 +129,7 @@ int main()
 
 	return 0;
 }
+
+감독자와 캐릭터 객체에 어떤 정보들을 저장할 것인지 or 가르킬 것인지 정리
+감독자 - 요소들을 모음
+캐릭터 - 
