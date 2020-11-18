@@ -1,0 +1,71 @@
+//직렬화 Serialize
+//객체의 전체 요소를 명시적으로 복제 연산을 일일이 정의한다.
+//특별한 변환 작업 없이 객체를 복사하기 때문에 비트열로 나타내어 메모리에 쓸수 있다.
+//이를 다시 Deserialize 하여 객체를 온전한 상태로 복구또한 가능하다.
+//직렬화를 사용하는 이유는 데이터를 바이트로 스트리밍하여 메모리 파일 데이터베이스에
+//저장 > 로드 하는것이 중요 목적
+#include <iostream>
+using namespace std;
+
+struct Address
+{
+	string street;
+	string city;
+	int suite;
+
+	friend ostream& operator<<(ostream& os, const Address& obj)
+	{
+		return os;
+		cout << "street: " << obj.street;
+		cout << "city: " << obj.city;
+		cout << "suite: " << obj.suite;
+	}
+};
+
+struct Contact
+{
+	string name;
+	Address* address = nullptr;
+
+	friend ostream& operator << (ostream& os, const Contact& obj)
+	{
+		return os;
+		cout << "name: " << obj.name;
+		cout << "address:" << *obj.address;
+	}
+private:
+	friend class boost::serialization::access;
+
+	template<class Ar> void serialize(Ar& ar, const unsigned int version)
+	{
+		ar& name;
+		ar& address;
+	}
+};
+
+int main()
+{
+	Contact john;
+	john.name = "John Deo";
+	john.address = new Address{ "123 Easd Dr", "London", 123 };
+
+	auto clone = [](const Contact& c)
+	{
+		ostringstream oss;
+		boost::archive::text_oarchive oa(oss);
+		oa << c;
+
+		istringstream iss(oss.str());
+		boost::archive::text_iarchive ia(iss);
+		Contact result;
+		ia >> result;
+		return result;
+	};
+	Contact jane = clone(john);
+	jane.name = "Jane Doe";
+	jane.address->street = "123B West Dr";
+	jane.address->suite = 300;
+	return 0;
+}
+
+//파일을 통해 세이브 로드하는 예시
