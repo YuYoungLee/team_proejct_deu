@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+struct Address
+{
+	string street;
+	string city;
+	int suite;
+};
+
+struct Contact
+{
+	string name;
+	Address* address;
+	//전과 같은 문제해결을 위해 복사 생성자를 통해 해결
+	Contact(string name, Address* address):name{name}, address{address}
+	{}
+	/*
+	//1. Address 의 항목이 추가 또는 삭제되었을때
+	Contact(const Contact& other) : name{ other.name } { address = new Address{ other.address->street, other.address->city, other.address->suite }; }
+	{
+		address = new Address{ other.address->street, other, address->city, other.address-> };
+	}
+	
+	//2. Address 항목이 수정됬을때
+	Contact(const Contact& other) : name{ other.name } { address = new Address{ *other.address }; }
+	{
+		address = newAddress{ *other.address };
+	}
+
+	//3. 2번과 동일
+	Contact(const Contact& other) : name{ other.name } { address = new Address{ *other.address }; }
+	{}
+	*/
+};
+
+중복 처리 문제 해결은 복사 생성자를 통해 간단히 해결이 가능하다.
+또한 항목의 내용을 변경시킬때 new를 통한 동적할당을 통해 해결하는 방법
+또는 포인터를 통해 주소를 참조하여 해결이 가능하다.
+이니셜라이저를 사용하여 더 간단히 축약또한 가능하다.
+
+위의 코드를 더 발전시키게 되면 템플릿을 통한 해결또한 가능
