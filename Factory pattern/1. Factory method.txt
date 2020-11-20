@@ -1,0 +1,25 @@
+//팩토리 메서드
+//생성할 타입의 멤버 함수로 객체를 생성하여 리턴
+//메서드는 생성자를 대신한다.
+//static 함수로 좌표 point 를 생성하는 방법
+
+class Point
+{
+protected:
+	//생성자를 통해 x y 좌표를 초기화
+	Point(const float x, const float y) : x{x}, y{y} {}
+
+public:
+	float x, y;
+
+	static Point NewCartesian(float x, float y)
+	{
+		//일반적인 좌표 리턴
+		return {x, y};
+	}
+	static Point NewPolar{float x, float y}
+	{
+		//코사인 사인값을 곱해서 리턴
+		return {r*cos(theta), r*sin(theta)};
+	}
+}
