@@ -1,0 +1,33 @@
+//팩토리 메서드 패턴
+//상속으로 구현하여 어떠한 객체를 만들것인지는 유도 클래스의 메서드가 결정한다.
+
+class Character
+{
+public:
+	virtual void Attack()=0;
+};
+
+class Archer : public Character
+{
+	void Attac() override
+	{
+		cout << "활을 쏘다." << endl;
+	}
+};
+
+class Warrior : public Character
+{
+	void Attac() override
+	{
+		cout << "칼을 휘두른다." << endl;
+	}
+	virtual Character* FactoryMethod() =0;
+};
+
+class ArcherCreator : public CharacterCreator
+{
+	Character* FactoryMetohd() override
+	{
+		return newArcher;
+	}
+}
