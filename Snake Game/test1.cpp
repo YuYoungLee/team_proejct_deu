@@ -185,7 +185,7 @@ void Draw() {
 	//프로토타입 선언
 	ContactName copy1;
 	ContactName copy2 = copy1;
-	if (score >= 5)
+	if (score >= 50)
 	{
 		cout << copy2.copyname << endl;
 	}
